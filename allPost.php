@@ -1,6 +1,15 @@
 <?php
 session_start();
 // print_r($_SESSION['old-information']['post-title']);
+include "./databese/evn.php";
+$query = "SELECT * FROM post ";
+//WHERE author = 'rashed'
+$respons = mysqli_query($conn, $query);
+$posts = mysqli_fetch_all($respons,1);
+// echo "<pre>";
+// var_dump($posts);
+// echo "</pre>";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,8 +19,7 @@ session_start();
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
-<body style="background-image: url(controller/img/giphy.gif)">
-    <!-- navigation section --> 
+<body style="background-image: url(controller/img/free-download-1600x900-resolution-of-high-quality-background-cool.jpg );background-image:cover" img="flued"> 
  <nav class="navbar navbar-expand-lg bg-body-tertiary " >
   <div class="container " >
     <a class="navbar-brand " style="margin: 0em 2em 0em 18em;" href="./index.php"><b>Post SYS</b></a>
@@ -29,53 +37,45 @@ session_start();
     </div>
   </div>
 </nav>
-<!-- form section start here -->
-<div class="card col-lg-4 m-auto my-3" style="background-color:yellow" >
-    <div class="card-header bg-dark text-light text-center "><b>Add post</b></div>
-<div class="card-body" >
-<form action="./controller/StorPost.php" method="post" class="card-body"  >
-  <!-- post title  -->
-    <input name="post-title" 
-    value="<?php print_r(isset($_SESSION['old-information']['post-title']) ? $_SESSION['old-information']['post-title'] : ''); ?>"
-    class="form-control mt-2" type="text"  placeholder="Enter your titel">
-    <?php
-    if(isset($_SESSION["form-errors"]['title'])){
-      ?>
-    <span class="text-danger"><?php print_r($_SESSION["form-errors"]['title']); ?> </span>
-    <?php
-    }else if(isset($_SESSION["form-errors"]['big-title'])){
-      ?> 
-    <span class="text-danger"><?php print_r($_SESSION["form-errors"]['big-title']); ?> </span>
-    <?php
-    }
-     ?>
-     <!-- detail -->
-    <textarea name="detail" class="form-control my-2" placeholder="Enter your text"><?php print_r(isset($_SESSION['old-information']['detail']) ? $_SESSION['old-information']['detail'] : null); ?></textarea>
-    <?php
-    if(isset($_SESSION["form-errors"]['detail'])){
-      ?>
-        <span class="text-danger"><?php print_r($_SESSION["form-errors"]['detail']); ?> </span>
-    <?php
-    }
-     ?>
-     <!-- author -->
-    <input name="author" 
-    value="<?php print_r(isset($_SESSION['old-information']['author']) ? $_SESSION['old-information']['author'] : ''); ?>"
-     class="form-control my-2" type="text"  placeholder="Enter name" >
-    <?php
-    if(isset($_SESSION["form-errors"]['author'])){
-      ?><span class="text-danger "><?php print_r($_SESSION["form-errors"]['author']); ?></span><br>
-    <?php
-    };
-    // echo "<br>";
-    ?>
-    <button class="btn btn-primary mt-2" style="margin-left:8em" > submit your post</button>
+<!-- table section  -->
+<div class=" col-lg-7 m-auto "style="background-color:red">
+<table class="table" style=" background-color:red">
+<tr>
+<th >id</th>
+<th>title</th>
+<th>detail</th>
+<th>author</th>
+</tr>
+<?php 
+if($posts >=0){
+foreach($posts as $key=>$post){
+  ?>
+  <tr>
+  <td><?php echo ++$key?></td>
+  <td><?php echo $post['title']?></td>
+  <td><?php echo strlen($post['detail']) > 50 ? substr($post['detail'],0,50)."...." : $post['detail']?></td>
+  <td><?php echo $post['author']?></td>
+  </tr>
+  <?php
+}
+}else{
+  ?>
+  <tr>
+  <td colspan="4" style="text-align:center">
+  <h2> your data is not found 😒😒😒</h2>
+  </td>
+  </tr>
+  <?php
+}
+?>
 
-</form>
+
+</table>
+</div>
 <!-- toast success notification -->
 <div class="toast <?php echo  isset($_SESSION['message']) ? "show" : '' ?>" style="position:absolute; right:10em; left:34em;top:27em" role="alert" aria-live="assertive" aria-atomic="true">
   <div class="toast-header">
-    <img src="./controller/img/dsc_0089.jpg" width="50px" height="50px" class="rounded me-2" alt="...">
+    <img src="..." class="rounded me-2" alt="...">
     <strong class="me-auto">your post</strong>
     <small>1 second ago</small>
     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>

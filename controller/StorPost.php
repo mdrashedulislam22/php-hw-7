@@ -1,6 +1,7 @@
 <?php
 //session_start
 session_start();
+include "../databese/evn.php";
 $title = $_REQUEST['post-title'];
 $detail = $_REQUEST['detail'];
 $author = $_REQUEST['author'];
@@ -27,6 +28,11 @@ if(count($erorse) > 0){
     $_SESSION["form-errors"] = $erorse;
     header("location:../index.php");
 }else{
-
+   $query = "INSERT INTO post(title, detail, author) VALUES ('$title','$detail','$author')";
+   $result = mysqli_query($conn, $query);
+   if($result){
+    $_SESSION['message'] = "your post has been successfully";
+    header("location:../index.php");
+   }
 };
 ?>
