@@ -1,7 +1,10 @@
 <?php
 //session_start
 session_start();
-include "../databese/evn.php";
+include "./databese/evn.php";
+$id = $_REQUEST['id'];
+// print_r($id);
+// exit();
 $title = $_REQUEST['post-title'];
 $detail = $_REQUEST['detail'];
 $author = $_REQUEST['author'];
@@ -26,15 +29,13 @@ if(empty($author)){
 };
 //back on home page for errors
 if(count($erorse) > 0){
-    $_SESSION['old-information'] = $_REQUEST;
-    $_SESSION["form-errors"] = $erorse;
-    header("location:../index.php");
+     $_SESSION["form-errors"] = $erorse;
+    header("location:./EditePost.php?id=$id");
 }else{
-   $query = "INSERT INTO post(title, detail, author) VALUES ('$title','$detail','$author')";
-   $result = mysqli_query($conn, $query);
-   if($result){
-    $_SESSION['message'] = "your post has been successfully";
-    header("location:../index.php");
-   }
+  $updete =  "UPDATE post SET title='$title',detail='$detail',author='$author' WHERE id = '$id'";
+  $respons = mysqli_query($conn, $updete);
+  $_SESSION['message'] = "your post has been updated";
+header("location:./allPost.php");
+
 };
 ?>
